@@ -8,25 +8,29 @@ const Item = ({ id, name, index }) => {
     setShowChildren(!showChildren);
   }, [showChildren, setShowChildren]);
   return (
-    <div onClick={handleClick} style={{fontWeight: showChildren ? 'bold': 'normal'}}>
+    <div onClick={handleClick} style={{ fontWeight: showChildren ? 'bold' : 'normal' }}>
       {`${name}: ${index}`}
     </div>
   );
 };
 
-const Tree = ({ obj, index }) => {
+const Tree = ({ obj, lavel, bbb }) => {
+  const newLavel = lavel + 1
   return (
     (obj ?? []).map((child, i) => {
+      const abc = bbb.split(',')
+      abc[newLavel] = i
+      abc.toString()
       return (
         <div key={child.id} className="items-tree">
           {
             child.children ? (
               <div>
-                <Item {...child} index={i}/>
-                <Tree obj={child.children} index={index + 1} />
+                <Item {...child} index={`${abc}` } />
+                <Tree obj={child.children} lavel={newLavel} bbb={`${abc}`}/>
               </div>
             ) : (
-              <Item {...child} index={i}/>
+              <Item {...child} index={`${abc}`} />
             )
           }
         </div>
@@ -34,6 +38,7 @@ const Tree = ({ obj, index }) => {
     })
   )
 }
+
 export default function Home() {
   const [data, setData] = useState([
     {
@@ -46,6 +51,14 @@ export default function Home() {
           children: [
             {
               id: 'item-1',
+              name: 'item',
+            },
+            {
+              id: 'item-2',
+              name: 'item',
+            },
+            {
+              id: 'item-3',
               name: 'item',
             },
           ],
@@ -61,7 +74,7 @@ export default function Home() {
             {
               id: 'item-4',
               name: 'item',
-            },
+            }
           ],
         },
       ],
@@ -100,7 +113,7 @@ export default function Home() {
   return (
     <div>
       <div style={{ padding: 20 }}>
-        <Tree obj={data} index={0} />
+        <Tree obj={data} index={0} lavel={-1} bbb=""/>
       </div>
     </div>
   )
