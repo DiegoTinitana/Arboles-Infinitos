@@ -1,4 +1,4 @@
-import {useContext, Children, isValidElement} from "react";
+import { useContext, Children, isValidElement } from "react";
 import { Draggable } from "react-beautiful-dnd";
 
 import TreeContext from "./TreeContext";
@@ -10,10 +10,9 @@ function TreeItem(props) {
 
   const { isExpanded, toggleNode, getIndex } = useContext(TreeContext)
 
-  const { level, siblingsLength, index } = useContext(TreeItemContext)
+  const { level } = useContext(TreeItemContext)
 
   const arr = Children.toArray(children);
-
   const childrenIncreased = arr.map((child, index) => {
     if (isValidElement(child)) {
       const contextValue = {
@@ -46,9 +45,9 @@ function TreeItem(props) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-            className="items-tree "
+            className="items-tree"
             level={level}
-            id={nodeId}
+            id={absoluteIndex}
             tabIndex={0}
           >
             <div onClick={() => toggleNode(nodeId)}>

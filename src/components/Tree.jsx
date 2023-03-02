@@ -1,23 +1,22 @@
-import React from "react";
+import React, { useCallback, useRef } from "react";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import TreeContext from "./TreeContext";
 import TreeItemContext from "./TreeItemContext";
 
 function Tree(props) {
-  const { children, expanded, onExpand } = props;
+  const { children, expanded, onExpand, onDragEnd } = props;
 
-  const nodeIndexRef = React.useRef(0);
+  const nodeIndexRef = useRef(0);
 
   const arr = React.Children.toArray(children);
-
-  const isExpanded = React.useCallback(
+  const isExpanded = useCallback(
     (nodeId) => {
       return expanded ? expanded.includes(nodeId) : false;
     },
     [expanded]
   );
 
-  const getIndex = React.useCallback(
+  const getIndex = useCallback(
     (nodeId) => {
       const firstNodeElement = arr[0];
       if (nodeId === firstNodeElement.props.nodeId) {
@@ -30,7 +29,7 @@ function Tree(props) {
     [arr]
   );
 
-  const toggleNode = React.useCallback(
+  const toggleNode = useCallback(
     (nodeId) => {
       if (onExpand && expanded) {
         if (isExpanded(nodeId)) {
@@ -68,11 +67,10 @@ function Tree(props) {
   return (
     <TreeContext.Provider value={contextValue}>
       <DragDropContext
-        onDragEnd={(e) => console.log(e)}
-        onDragUpdate={(e) => console.log(e)}
+        onDragEnd={onDragEnd}
       >
         <Droppable droppableId="test">
-          {(provided, snapshot) => (
+          {(provided) => (
             <div
               {...provided.droppableProps}
               ref={provided.innerRef}

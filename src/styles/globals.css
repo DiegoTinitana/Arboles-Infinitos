@@ -1,8 +1,6 @@
 .items-tree {
-  position: relative;
   display: flex;
-  flex-direction: column;
-  padding-left: 30px;
+  gap: 3px
 }
 
 /* .items-tree::before {

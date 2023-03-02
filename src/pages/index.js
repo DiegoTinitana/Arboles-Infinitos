@@ -1,132 +1,183 @@
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { useCallback, useState } from 'react';
+import { resetServerContext } from "react-beautiful-dnd";
+import { useState } from 'react';
 import Tree from "../components/Tree";
 import TreeItem from "../components/TreeItem";
-// const Item = ({ id, name, index }) => {
-//   const [showChildren, setShowChildren] = useState(false);
-//   const handleClick = useCallback(() => {
-//     setShowChildren(!showChildren);
-//   }, [showChildren, setShowChildren]);
-//   return (
-//     <div onClick={handleClick} style={{ fontWeight: showChildren ? 'bold' : 'normal' }}>
-//       {`${name}: ${index}`}
-//     </div>
-//   );
-// };
-
-// const Tree = ({ obj, lavel, bbb }) => {
-//   const newLavel = lavel + 1
-//   return (
-//     (obj ?? []).map((child, i) => {
-//       const abc = bbb.split(',')
-//       abc[newLavel] = i
-//       abc.toString()
-//       return (
-//         <div key={child.id} className="items-tree">
-//           {
-//             child.children ? (
-//               <div>
-//                 <Item {...child} index={`${abc}` } />
-//                 <Tree obj={child.children} lavel={newLavel} bbb={`${abc}`}/>
-//               </div>
-//             ) : (
-//               <Item {...child} index={`${abc}`} />
-//             )
-//           }
-//         </div>
-//       )
-//     })
-//   )
-// }
 
 export default function Home() {
-  const [data, setData] = useState([
-    {
-      id: 'Ropa',
-      name: 'Ropa',
-      children: [
-        {
-          id: 'seccion-1',
-          name: 'seccion',
-          children: [
-            {
-              id: 'item-1',
-              name: 'item',
-            },
-            {
-              id: 'item-2',
-              name: 'item',
-            },
-            {
-              id: 'item-3',
-              name: 'item',
-            },
-          ],
-        },
-        {
-          id: 'seccion-2',
-          name: 'seccion',
-          children: [
-            {
-              id: 'item-3',
-              name: 'item',
-            },
-            {
-              id: 'item-4',
-              name: 'item',
+  const [data, setData] = useState(
+    [
+      {
+        "id": "9b1c64b4-81ca-4b7f-b0c4-4d120dd04b0d",
+        "title": "Comestibles",
+        "type": "parent",
+        "image": "https://picsum.photos/200?random=1",
+        "children": [
+          {
+            "id": "bbd8a42a-1c03-4630-83d9-9c64dc1f0515",
+            "title": "Caramelos",
+            "type": "parent",
+            "image": "https://picsum.photos/200?random=2",
+            "children": [
+              {
+                "id": "9b92ccec-5a94-4631-8faa-0c82002ef757",
+                "title": "Ácidos",
+                "type": "list",
+                "image": "https://picsum.photos/200?random=3",
+                "items": {
+                  "paging_data": {
+                    "items_count": 3,
+                    "current_page": 1
+                  },
+                  "values": [
+                    {
+                      "id": "MLA7890123456",
+                      "title": "Super Acido"
+                    },
+                    {
+                      "id": "MLA5678901234",
+                      "title": "Caramelo bomba"
+                    },
+                    {
+                      "id": "MLA1234567890",
+                      "title": "Caramelo asesino"
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "b9c65df2-34a1-4d1a-8faa-efecfbaea5d5",
+                "title": "Dulces",
+                "type": "list",
+                "image": "https://picsum.photos/200?random=4",
+                "items": {
+                  "paging_data": {
+                    "items_count": 2,
+                    "current_page": 1
+                  },
+                  "values": [
+                    {
+                      "id": "MLB2468109753",
+                      "title": "Sugus"
+                    },
+                    {
+                      "id": "MLB8642097531",
+                      "title": "De miel"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "id": "c3f746a3-6203-4b8e-88e3-3de99cc9c180",
+            "title": "Alfajores",
+            "type": "list",
+            "image": "https://picsum.photos/200?random=5",
+            "items": {
+              "paging_data": {
+                "items_count": 2,
+                "current_page": 1
+              },
+              "values": [
+                {
+                  "id": "MLC9753108642",
+                  "title": "Alfajor Jorgito"
+                },
+                {
+                  "id": "MCO1098765432",
+                  "title": "Alfajor Guaymayen"
+                }
+              ]
             }
-          ],
-        },
-      ],
-    },
-    {
-      id: 'Carros',
-      name: 'Carros',
-      children: [
-        {
-          id: 'seccion-1',
-          name: 'seccion',
-          children: [
+          }
+        ]
+      },
+      {
+        "id": "a1234567-89bc-4def-1234-56789abcdef0",
+        "title": "Bebidas",
+        "type": "list",
+        "image": "https://picsum.photos/200?random=6",
+        "items": {
+          "paging_data": {
+            "items_count": 3,
+            "current_page": 1
+          },
+          "values": [
             {
-              id: 'item-1',
-              name: 'item',
-            },
-          ],
-        },
-        {
-          id: 'seccion-2',
-          name: 'seccion',
-          children: [
-            {
-              id: 'item-1',
-              name: 'item',
+              "id": "MLA0123456789",
+              "title": "Agua"
             },
             {
-              id: 'item-2',
-              name: 'item',
+              "id": "MLB0987654321",
+              "title": "Cocacola"
             },
-          ],
-        },
-      ],
-    },
-  ])
+            {
+              "id": "MLC1357908642",
+              "title": "Seven Up"
+            }
+          ]
+        }
+      }
+    ]
+  )
   const [expanded, setExpanded] = useState([]);
+  
+  const RenderItems = ({ obj, lavel = -1, tree = "" }) => {
+    const newLavel = lavel + 1
+    return (
+      (obj ?? []).map((child, i) => {
+        const newTree = tree.split('.')
+        newTree[newLavel] = i
+        const abc = newTree.toString().replaceAll(',','.')
+        return (
+          <div key={abc}>
+            {
+              child.children ? (
+                <TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}>
+                  <RenderItems obj={child.children} lavel={newLavel} tree={`${abc}`} />
+                </TreeItem>
+              ) : child.type === 'list' ? (
+                <TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}>
+                  <RenderItems obj={child.items.values} lavel={newLavel} tree={`${abc}`} />
+                </TreeItem>
+              ) : (<TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}/>)
+            }
+          </div>
+        )
+      })
+    )
+  }
+
+  const HonClick =() =>{
+    const newdata = [...data]
+     newdata[0].children.push({
+      id: 'seccion-3',
+      title: 'seccion',
+    },)
+    setData(newdata)
+  }
+
+  const onDragEnd = (e) => {
+    console.log(e)
+  //  const id = e.destination.index
+  //  const draggableId = e.draggableId
+  //  const abc = document.getElementById(id)
+  //  let text = abc.getAttribute("data-rbd-draggable-id");
+  //  const elementDelete = draggableId.split('.').map((dragId) => parseInt(dragId))
+  //  const elementInserted = text.split('.').map((dragId) => parseInt(dragId))
+  //   console.log(elementDelete, elementInserted)
+  }
   return (
     <div>
-      {/* <div style={{ padding: 20 }}>
-        <Tree obj={data} index={0} lavel={-1} bbb=""/>
-      </div> */}
-      <Tree expanded={expanded} onExpand={setExpanded}>
-        <TreeItem label="Item 1" nodeId="1">
-          <TreeItem label="Item 1.1" nodeId="1.1" />
-          <TreeItem label="Item 1.2" nodeId="1.2" />
-          <TreeItem label="Item 1.3" nodeId="1.3">
-            <TreeItem label="Item 1.3.1" nodeId="1.3.1" />
-          </TreeItem>
-        </TreeItem>
-        <TreeItem label="Item 2" nodeId="2" />
-        <TreeItem label="Item 3" nodeId="3" />
+      <Tree expanded={expanded} onExpand={setExpanded} onDragEnd={onDragEnd}>
+        <RenderItems obj={data} />
       </Tree>
+      <button onClick={HonClick}>click</button>
     </div>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  resetServerContext();
+  return { props: { data: [] } }
 }
