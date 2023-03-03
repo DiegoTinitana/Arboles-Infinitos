@@ -1,21 +1,4 @@
 .items-tree {
   display: flex;
-  gap: 3px
+  gap: 10px;
 }
-
-/* .items-tree::before {
-  content: "";
-  border-left: 1px dotted;
-  height: 90%;
-  position: absolute;
-  left: 4px;
-}
-
-.items-tree::after {
-  content: "";
-  border-bottom: 1px dotted;
-  width: 3%;
-  position: absolute;
-  left: -24px;
-  top: -11px;
-} */

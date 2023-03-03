@@ -23,25 +23,25 @@ export default function Home() {
                 "title": "Ácidos",
                 "type": "list",
                 "image": "https://picsum.photos/200?random=3",
+                children: [
+                  {
+                    "id": "MLA7890123456",
+                    "title": "Super Acido"
+                  },
+                  {
+                    "id": "MLA5678901234",
+                    "title": "Caramelo bomba"
+                  },
+                  {
+                    "id": "MLA1234567890",
+                    "title": "Caramelo asesino"
+                  }
+                ],
                 "items": {
                   "paging_data": {
                     "items_count": 3,
                     "current_page": 1
                   },
-                  "values": [
-                    {
-                      "id": "MLA7890123456",
-                      "title": "Super Acido"
-                    },
-                    {
-                      "id": "MLA5678901234",
-                      "title": "Caramelo bomba"
-                    },
-                    {
-                      "id": "MLA1234567890",
-                      "title": "Caramelo asesino"
-                    }
-                  ]
                 }
               },
               {
@@ -159,13 +159,19 @@ export default function Home() {
 
   const onDragEnd = (e) => {
     console.log(e)
-  //  const id = e.destination.index
-  //  const draggableId = e.draggableId
-  //  const abc = document.getElementById(id)
-  //  let text = abc.getAttribute("data-rbd-draggable-id");
-  //  const elementDelete = draggableId.split('.').map((dragId) => parseInt(dragId))
-  //  const elementInserted = text.split('.').map((dragId) => parseInt(dragId))
-  //   console.log(elementDelete, elementInserted)
+    if( e.destination === null) {
+      return
+     }
+   const id = e.destination.index
+
+   const draggableId = e.draggableId
+   const abc = document.getElementById(id)
+   let text = abc.getAttribute("data-rbd-draggable-id");
+   const elementDelete = draggableId.split('.').map((dragId) => parseInt(dragId))
+   const elementInserted = text.split('.').map((dragId) => parseInt(dragId))
+
+   console.log(elementDelete, elementInserted)
+   //TODO actualizar el estado
   }
   return (
     <div>

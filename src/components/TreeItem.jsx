@@ -4,6 +4,17 @@ import { Draggable } from "react-beautiful-dnd";
 import TreeContext from "./TreeContext";
 import TreeItemContext from "./TreeItemContext";
 
+export const getItemStyle = (isDragging, draggableStyle, level) => {
+  return {
+    userSelect: "none",
+    paddingLeft: 15 * level,
+    margin: 5,
+    background: isDragging ? "lightgreen" : "white",
+    width: 200,
+    ...draggableStyle
+  };
+};
+
 
 function TreeItem(props) {
   const { children, label, nodeId } = props;
@@ -39,17 +50,24 @@ function TreeItem(props) {
 
   return (
     <Draggable index={absoluteIndex} draggableId={nodeId}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <>
           <div
             {...provided.draggableProps}
-            {...provided.dragHandleProps}
             ref={provided.innerRef}
             className="items-tree"
+            style={getItemStyle(
+              snapshot.isDragging,
+              provided.draggableProps.style,
+              level
+            )}
             level={level}
             id={absoluteIndex}
             tabIndex={0}
           >
+            <div {...provided.dragHandleProps}>
+              ::
+            </div>
             <div onClick={() => toggleNode(nodeId)}>
               {expandable && expandedIcon}
             </div>
