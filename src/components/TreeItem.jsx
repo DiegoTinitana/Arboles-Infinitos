@@ -4,13 +4,21 @@ import { Draggable } from "react-beautiful-dnd";
 import TreeContext from "./TreeContext";
 import TreeItemContext from "./TreeItemContext";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGripVertical } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+
 export const getItemStyle = (isDragging, draggableStyle, level) => {
   return {
     userSelect: "none",
     paddingLeft: 15 * level,
     margin: 5,
     background: isDragging ? "lightgreen" : "white",
-    width: 200,
+    width: 786,
+    height: 44,
+
     ...draggableStyle
   };
 };
@@ -44,7 +52,7 @@ function TreeItem(props) {
 
   const expanded = expandable ? isExpanded(nodeId) : undefined;
 
-  const expandedIcon = expanded ? "-" : "+";
+  const expandedIcon = expanded ? <FontAwesomeIcon icon={faAngleUp} style={{ fontSize: 13, color:'#3483FA' }} /> : <FontAwesomeIcon icon={faAngleDown} style={{ fontSize: 13, color:'#3483FA'  }} />;
 
   const absoluteIndex = getIndex(nodeId);
 
@@ -65,13 +73,18 @@ function TreeItem(props) {
             id={absoluteIndex}
             tabIndex={0}
           >
-            <div {...provided.dragHandleProps}>
-              ::
+            <div className="items-tree-section">
+              <div {...provided.dragHandleProps}>
+                <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: 13, color:'#3483FA' }} />
+              </div>
+              <div onClick={() => toggleNode(nodeId)}>
+                {expandable && expandedIcon}
+              </div>
+              <div>{label}</div>
             </div>
-            <div onClick={() => toggleNode(nodeId)}>
-              {expandable && expandedIcon}
+            <div className="items-tree-section-end">
+              <FontAwesomeIcon icon={faEllipsisV} style={{ fontSize: 13 }} />
             </div>
-            <div>{label}</div>
           </div>
           {expanded && childrenIncreased}
         </>

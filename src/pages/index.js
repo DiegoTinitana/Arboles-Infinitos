@@ -23,7 +23,11 @@ export default function Home() {
                 "title": "Ácidos",
                 "type": "list",
                 "image": "https://picsum.photos/200?random=3",
-                children: [
+                "paging_data": {
+                  "items_count": 3,
+                  "current_page": 1
+                },
+                "children": [
                   {
                     "id": "MLA7890123456",
                     "title": "Super Acido"
@@ -36,35 +40,28 @@ export default function Home() {
                     "id": "MLA1234567890",
                     "title": "Caramelo asesino"
                   }
-                ],
-                "items": {
-                  "paging_data": {
-                    "items_count": 3,
-                    "current_page": 1
-                  },
-                }
+                ]
               },
               {
                 "id": "b9c65df2-34a1-4d1a-8faa-efecfbaea5d5",
                 "title": "Dulces",
                 "type": "list",
                 "image": "https://picsum.photos/200?random=4",
-                "items": {
-                  "paging_data": {
-                    "items_count": 2,
-                    "current_page": 1
+                "paging_data": {
+                  "items_count": 2,
+                  "current_page": 1
+                },
+                "children": [
+                  {
+                    "id": "MLB2468109753",
+                    "title": "Sugus"
                   },
-                  "values": [
-                    {
-                      "id": "MLB2468109753",
-                      "title": "Sugus"
-                    },
-                    {
-                      "id": "MLB8642097531",
-                      "title": "De miel"
-                    }
-                  ]
-                }
+                  {
+                    "id": "MLB8642097531",
+                    "title": "De miel"
+                  }
+                ]
+
               }
             ]
           },
@@ -73,22 +70,20 @@ export default function Home() {
             "title": "Alfajores",
             "type": "list",
             "image": "https://picsum.photos/200?random=5",
-            "items": {
-              "paging_data": {
-                "items_count": 2,
-                "current_page": 1
+            "paging_data": {
+              "items_count": 2,
+              "current_page": 1
+            },
+            "children": [
+              {
+                "id": "MLC9753108642",
+                "title": "Alfajor Jorgito"
               },
-              "values": [
-                {
-                  "id": "MLC9753108642",
-                  "title": "Alfajor Jorgito"
-                },
-                {
-                  "id": "MCO1098765432",
-                  "title": "Alfajor Guaymayen"
-                }
-              ]
-            }
+              {
+                "id": "MCO1098765432",
+                "title": "Alfajor Guaymayen"
+              }
+            ]
           }
         ]
       },
@@ -97,50 +92,90 @@ export default function Home() {
         "title": "Bebidas",
         "type": "list",
         "image": "https://picsum.photos/200?random=6",
-        "items": {
-          "paging_data": {
-            "items_count": 3,
-            "current_page": 1
+        "children": [
+          {
+            "id": "MLA0123456789",
+            "title": "Agua"
           },
-          "values": [
-            {
-              "id": "MLA0123456789",
-              "title": "Agua"
-            },
-            {
-              "id": "MLB0987654321",
-              "title": "Cocacola"
-            },
-            {
-              "id": "MLC1357908642",
-              "title": "Seven Up"
-            }
-          ]
-        }
+          {
+            "id": "MLB0987654321",
+            "title": "Cocacola"
+          },
+          {
+            "id": "MLC1357908642",
+            "title": "Seven Up"
+          }
+        ]
       }
     ]
   )
+
+  const reorder = (starIndex, endIndex, list) => {
+    const result = [...list]
+    const [removed] = result.splice(starIndex, 1)
+    result.splice(endIndex, 0, removed)
+    return result
+  }
+
   const [expanded, setExpanded] = useState([]);
-  
+
+  const reorderWithCoorder = (coordStart, coordEnd, obj) => {
+    const newObj = [...obj]
+    let elementRemovie = undefined
+
+    if(coordStart.length === 1 && coordEnd.length === 1) {
+      return reorder(coordStart[0], coordEnd[0], newObj)
+    }
+
+    const getElementByCorrd = (newCoordStart, recurObj) => {
+      if (newCoordStart.length === 2) {
+        const coord = newCoordStart.shift()
+        const result = recurObj[coord]
+        const [removed] = result.children.splice(newCoordStart[0], 1)
+        elementRemovie = removed
+        return
+      }
+      const coord = newCoordStart.shift()
+      getElementByCorrd(newCoordStart, recurObj[coord].children)
+    }
+    getElementByCorrd(coordStart, newObj)
+
+    const insertElemetByCord = (newCoordEnd, newObj) => {
+      if (newCoordEnd.length === 2) {
+        const coord = newCoordEnd.shift()
+        const result = newObj[coord]
+        result.children.splice(newCoordEnd[0], 0, elementRemovie)
+        return
+      }
+      const coord = newCoordEnd.shift()
+      insertElemetByCord(newCoordEnd, newObj[coord].children)
+    }
+
+    insertElemetByCord(coordEnd, newObj)
+
+    return newObj
+  }
+
+
   const RenderItems = ({ obj, lavel = -1, tree = "" }) => {
     const newLavel = lavel + 1
     return (
       (obj ?? []).map((child, i) => {
         const newTree = tree.split('.')
         newTree[newLavel] = i
-        const abc = newTree.toString().replaceAll(',','.')
+        const abc = newTree.toString().replaceAll(',', '.')
         return (
           <div key={abc}>
             {
               child.children ? (
-                <TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}>
+                <TreeItem label={`${child.title}`} nodeId={`${abc}`}>
                   <RenderItems obj={child.children} lavel={newLavel} tree={`${abc}`} />
                 </TreeItem>
               ) : child.type === 'list' ? (
-                <TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}>
+                <TreeItem label={`${child.title}`} nodeId={`${abc}`}>
                   <RenderItems obj={child.items.values} lavel={newLavel} tree={`${abc}`} />
                 </TreeItem>
-              ) : (<TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}/>)
+              ) : (<TreeItem label={`${child.title}`} nodeId={`${abc}`} />)
             }
           </div>
         )
@@ -148,9 +183,9 @@ export default function Home() {
     )
   }
 
-  const HonClick =() =>{
+  const HonClick = () => {
     const newdata = [...data]
-     newdata[0].children.push({
+    newdata[0].children.push({
       id: 'seccion-3',
       title: 'seccion',
     },)
@@ -158,27 +193,29 @@ export default function Home() {
   }
 
   const onDragEnd = (e) => {
-    console.log(e)
-    if( e.destination === null) {
+    const { source, destination, draggableId } = e;
+    if (destination === null) {
       return
-     }
-   const id = e.destination.index
+    }
 
-   const draggableId = e.draggableId
-   const abc = document.getElementById(id)
-   let text = abc.getAttribute("data-rbd-draggable-id");
-   const elementDelete = draggableId.split('.').map((dragId) => parseInt(dragId))
-   const elementInserted = text.split('.').map((dragId) => parseInt(dragId))
+    const id = destination.index
 
-   console.log(elementDelete, elementInserted)
-   //TODO actualizar el estado
+    const abc = document.getElementById(id)
+    let text = abc.getAttribute("data-rbd-draggable-id");
+    const startElements = draggableId.split('.').map((dragId) => parseInt(dragId))
+    const endElements = text.split('.').map((dragId) => parseInt(dragId))
+
+    const result = reorderWithCoorder(startElements, endElements, data)
+    console.log(startElements, 'startElements', endElements, 'endElements')
+    setData(result)
+    //TODO actualizar el estado
   }
   return (
-    <div>
+    <div className="root">
       <Tree expanded={expanded} onExpand={setExpanded} onDragEnd={onDragEnd}>
         <RenderItems obj={data} />
       </Tree>
-      <button onClick={HonClick}>click</button>
+      {/* <button onClick={HonClick}>click</button> */}
     </div>
   )
 }
