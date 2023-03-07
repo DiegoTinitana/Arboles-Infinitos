@@ -16,9 +16,6 @@ export const getItemStyle = (isDragging, draggableStyle, level) => {
     paddingLeft: 15 * level,
     margin: 5,
     background: isDragging ? "lightgreen" : "white",
-    width: 786,
-    height: 44,
-
     ...draggableStyle
   };
 };
@@ -81,11 +78,13 @@ function TreeItem(props) {
                 {expandable && expandedIcon}
               </div>
               <div>{label}</div>
+              <button onClick={() => console.log(nodeId)}> show node Id</button>
             </div>
             <div className="items-tree-section-end">
               <FontAwesomeIcon icon={faEllipsisV} style={{ fontSize: 13 }} />
             </div>
           </div>
+      
           {expanded && childrenIncreased}
         </>
       )}

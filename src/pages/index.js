@@ -30,7 +30,21 @@ export default function Home() {
                 "children": [
                   {
                     "id": "MLA7890123456",
-                    "title": "Super Acido"
+                    "title": "Super Acido",
+                    "children": [
+                      {
+                        "id": "MLA0123456789",
+                        "title": "Agua"
+                      },
+                      {
+                        "id": "MLB0987654321",
+                        "title": "Cocacola"
+                      },
+                      {
+                        "id": "MLC1357908642",
+                        "title": "Seven Up"
+                      }
+                    ]
                   },
                   {
                     "id": "MLA5678901234",
@@ -168,14 +182,14 @@ export default function Home() {
           <div key={abc}>
             {
               child.children ? (
-                <TreeItem label={`${child.title}`} nodeId={`${abc}`}>
+                <TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}>
                   <RenderItems obj={child.children} lavel={newLavel} tree={`${abc}`} />
                 </TreeItem>
               ) : child.type === 'list' ? (
-                <TreeItem label={`${child.title}`} nodeId={`${abc}`}>
+                <TreeItem label={`${child.title}:  ${abc}`} nodeId={`${abc}`}>
                   <RenderItems obj={child.items.values} lavel={newLavel} tree={`${abc}`} />
                 </TreeItem>
-              ) : (<TreeItem label={`${child.title}`} nodeId={`${abc}`} />)
+              ) : (<TreeItem label={`${child.title}:  ${abc}`} nodeId={`${abc}`} />)
             }
           </div>
         )
