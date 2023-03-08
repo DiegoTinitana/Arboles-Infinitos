@@ -58,7 +58,7 @@ function TreeItem(props) {
     <Draggable index={absoluteIndex} draggableId={nodeId}>
       {(provided, snapshot) => (
         <div style={{ position: 'relative' }} className="item-container">
-          {level !== 0 && expanded && <div className="vline-2" style={{ left: (20 * level) }} />}
+          {level !== 0 && expanded && <div className="vline-2" style={{ left: (30 * level) - 15 }} />}
           <div
             {...provided.draggableProps}
             ref={provided.innerRef}
@@ -71,7 +71,7 @@ function TreeItem(props) {
             id={absoluteIndex}
             tabIndex={0}
           >
-            {level !== 0 && <div className="line" style={{ left: (20 * level), width: (30 * level) }}></div>}
+            {level !== 0 && <div className="line" style={{ left: (30 * level) - 15, width: (30 * level) }}></div>}
             <div className="items-tree-section">
               <div className="items-tree-section-container">
                 <div {...provided.dragHandleProps}>
