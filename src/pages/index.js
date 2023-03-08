@@ -133,7 +133,9 @@ export default function Home() {
 
   const [expanded, setExpanded] = useState([]);
 
-  const reorderWithCoorder = (coordStart, coordEnd, obj) => {
+  const reorderWithCoorder = (start, end, obj) => {
+    const coordStart = [...start]
+    const coordEnd = [...end]
     const newObj = [...obj]
     let elementRemovie = undefined
 
@@ -171,25 +173,24 @@ export default function Home() {
   }
 
 
-  const RenderItems = ({ obj, lavel = -1, tree = "" }) => {
-    const newLavel = lavel + 1
+  const RenderItems = ({ obj, level = 0, tree = "" }) => {
     return (
-      (obj ?? []).map((child, i) => {
+      (obj ?? []).map((child, index) => {
         const newTree = tree.split('.')
-        newTree[newLavel] = i
-        const abc = newTree.toString().replaceAll(',', '.')
+        newTree[level] = index
+        const nodeId = newTree.toString().replace(/,/g, '.');
         return (
-          <div key={abc}>
+          <div key={nodeId}>
             {
               child.children ? (
-                <TreeItem label={`${child.title}: ${abc}`} nodeId={`${abc}`}>
-                  <RenderItems obj={child.children} lavel={newLavel} tree={`${abc}`} />
+                <TreeItem label={`${child.title}: ${nodeId}`} nodeId={`${nodeId}`}>
+                  <RenderItems obj={child.children} level={level + 1} tree={`${nodeId}`} />
                 </TreeItem>
               ) : child.type === 'list' ? (
-                <TreeItem label={`${child.title}:  ${abc}`} nodeId={`${abc}`}>
-                  <RenderItems obj={child.items.values} lavel={newLavel} tree={`${abc}`} />
+                <TreeItem label={`${child.title}:  ${nodeId}`} nodeId={`${nodeId}`}>
+                  <RenderItems obj={child.items.values} level={level + 1} tree={`${nodeId}`} />
                 </TreeItem>
-              ) : (<TreeItem label={`${child.title}:  ${abc}`} nodeId={`${abc}`} />)
+              ) : (<TreeItem label={`${child.title}:  ${nodeId}`} nodeId={`${nodeId}`} />)
             }
           </div>
         )

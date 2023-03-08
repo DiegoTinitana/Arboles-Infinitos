@@ -7,6 +7,7 @@ function Tree(props) {
   const { children, expanded, onExpand, onDragEnd } = props;
 
   const nodeIndexRef = useRef(0);
+  let relativeIndex = 0
 
   const arr = React.Children.toArray(children);
   const isExpanded = useCallback(
@@ -32,6 +33,7 @@ function Tree(props) {
   const toggleNode = useCallback(
     (nodeId) => {
       if (onExpand && expanded) {
+        nodeIndexRef.current = 0;
         if (isExpanded(nodeId)) {
           onExpand(expanded.filter((id) => id !== nodeId));
         } else {
@@ -46,7 +48,7 @@ function Tree(props) {
     if (React.isValidElement(child)) {
       const childContextValue = {
         index,
-        level: 1,
+        level: 0,
         siblingsLength: arr.length
       };
       return (

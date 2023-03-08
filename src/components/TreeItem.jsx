@@ -13,9 +13,9 @@ import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 export const getItemStyle = (isDragging, draggableStyle, level) => {
   return {
     userSelect: "none",
-    paddingLeft: 15 * level,
-    margin: 5,
-    background: isDragging ? "lightgreen" : "white",
+    marginBottom: 5,
+    paddingLeft: 30 * level,
+    with: 740 - 30 * level,
     ...draggableStyle
   };
 };
@@ -49,18 +49,18 @@ function TreeItem(props) {
 
   const expanded = expandable ? isExpanded(nodeId) : undefined;
 
-  const expandedIcon = expanded ? <FontAwesomeIcon icon={faAngleUp} style={{ fontSize: 13, color:'#3483FA' }} /> : <FontAwesomeIcon icon={faAngleDown} style={{ fontSize: 13, color:'#3483FA'  }} />;
+  const expandedIcon = expanded ? <FontAwesomeIcon icon={faAngleUp} style={{ fontSize: 13, color: '#3483FA' }} /> : <FontAwesomeIcon icon={faAngleDown} style={{ fontSize: 13, color: '#3483FA' }} />;
 
   const absoluteIndex = getIndex(nodeId);
 
   return (
     <Draggable index={absoluteIndex} draggableId={nodeId}>
       {(provided, snapshot) => (
-        <>
+        <div style={{ position: 'relative' }}>
+          {expanded && <span className="v_line" style={{ left: (30 * level) + 15, height: "90%" }}></span>}
           <div
             {...provided.draggableProps}
             ref={provided.innerRef}
-            className="items-tree"
             style={getItemStyle(
               snapshot.isDragging,
               provided.draggableProps.style,
@@ -70,23 +70,25 @@ function TreeItem(props) {
             id={absoluteIndex}
             tabIndex={0}
           >
+            {level != 0 && <div className="h_line" style={{ width: 15, left: (30 * level) - 15 }}></div>}
             <div className="items-tree-section">
-              <div {...provided.dragHandleProps}>
-                <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: 13, color:'#3483FA' }} />
+              <div className="items-tree-section-container">
+                <div {...provided.dragHandleProps}>
+                  <FontAwesomeIcon icon={faGripVertical} style={{ fontSize: 13, color: '#3483FA' }} />
+                </div>
+                <div onClick={() => toggleNode(nodeId)}>
+                  {expandable && expandedIcon}
+                </div>
+                <div>{label}</div>
+                <button onClick={() => console.log(nodeId)}> show node Id</button>
               </div>
-              <div onClick={() => toggleNode(nodeId)}>
-                {expandable && expandedIcon}
+              <div className="items-tree-section-end">
+                <FontAwesomeIcon icon={faEllipsisV} style={{ fontSize: 13 }} />
               </div>
-              <div>{label}</div>
-              <button onClick={() => console.log(nodeId)}> show node Id</button>
-            </div>
-            <div className="items-tree-section-end">
-              <FontAwesomeIcon icon={faEllipsisV} style={{ fontSize: 13 }} />
             </div>
           </div>
-      
           {expanded && childrenIncreased}
-        </>
+        </div>
       )}
     </Draggable>
   );

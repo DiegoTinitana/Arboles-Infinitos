@@ -1,15 +1,7 @@
 .root {
   padding: 20px;
   background: #EDEDED;
-}
-
-.items-tree {
-  display: flex;
-  gap: 15px;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 6px;
-  width: 786px;
+  width: 740px;
 }
 
 .items-tree-section {
@@ -18,9 +10,27 @@
   align-items: center;
   border-radius: 6px;
   height: 44px;
+  background: white;
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+.items-tree-section-container {
+  display: flex;
+  gap: 15px;
+  align-items: center;
   width: 100%;
 }
 
-.items-tree-section-end {
-  padding: 15px;
+.v_line {
+  border-left: 2px solid;
+  top: 46px;
+  position: absolute;
+}
+
+.h_line {
+  border-bottom: 2px solid;
+  margin: auto;
+  position: absolute;
+  top: 22px;
 }
