@@ -15,7 +15,8 @@ export const getItemStyle = (isDragging, draggableStyle, level) => {
     userSelect: "none",
     marginBottom: 5,
     paddingLeft: 30 * level,
-    with: 740 - 30 * level,
+    position: 'relative',
+    width: 740 - 30 * level,
     ...draggableStyle
   };
 };
@@ -26,7 +27,7 @@ function TreeItem(props) {
 
   const { isExpanded, toggleNode, getIndex } = useContext(TreeContext)
 
-  const { level } = useContext(TreeItemContext)
+  const { level, siblingsLength, index } = useContext(TreeItemContext)
 
   const arr = Children.toArray(children);
   const childrenIncreased = arr.map((child, index) => {
@@ -56,8 +57,8 @@ function TreeItem(props) {
   return (
     <Draggable index={absoluteIndex} draggableId={nodeId}>
       {(provided, snapshot) => (
-        <div style={{ position: 'relative' }}>
-          {expanded && <span className="v_line" style={{ left: (30 * level) + 15, height: "90%" }}></span>}
+        <div style={{ position: 'relative' }} className="item-container">
+          {level !== 0 && expanded && <div className="vline-2" style={{ left: (20 * level) }} />}
           <div
             {...provided.draggableProps}
             ref={provided.innerRef}
@@ -70,7 +71,7 @@ function TreeItem(props) {
             id={absoluteIndex}
             tabIndex={0}
           >
-            {level != 0 && <div className="h_line" style={{ width: 15, left: (30 * level) - 15 }}></div>}
+            {level !== 0 && <div className="line" style={{ left: (20 * level), width: (30 * level) }}></div>}
             <div className="items-tree-section">
               <div className="items-tree-section-container">
                 <div {...provided.dragHandleProps}>
