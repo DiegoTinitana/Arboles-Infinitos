@@ -27,7 +27,7 @@ function TreeItem(props) {
 
   const { isExpanded, toggleNode, getIndex } = useContext(TreeContext)
 
-  const { level, siblingsLength, index } = useContext(TreeItemContext)
+  const { level } = useContext(TreeItemContext)
 
   const arr = Children.toArray(children);
   const childrenIncreased = arr.map((child, index) => {
