@@ -13,6 +13,8 @@
   background: white;
   padding-left: 14px;
   padding-right: 14px;
+  position: relative;
+  z-index: 2;
 }
 
 .items-tree-section-container {
@@ -20,6 +22,31 @@
   gap: 15px;
   align-items: center;
   width: 100%;
+}
+
+.line {
+  border-left: 2px dashed lightgray;
+  border-bottom: 2px dashed lightgray;
+  height: 50px;
+  width: 100%;
+  position: absolute;
+  top: -50%;
+  z-index: 0;
+}
+
+div:not([class]):not(:last-child) .line.parent {
+  border-bottom: none;
+}
+
+.vline-2 {
+  border-left: 2px dashed lightgray;
+  height: calc(100% - 44px);
+  position: absolute;
+  top: 28px;
+}
+
+.item-container div:not([class]):last-child .item-container .vline-2 {
+  display: none;
 }
 
 .v_line {
