@@ -31,20 +31,6 @@ export default function Home() {
                   {
                     "id": "MLA7890123456",
                     "title": "Super Acido",
-                    "children": [
-                      {
-                        "id": "MLA0123456789",
-                        "title": "Agua"
-                      },
-                      {
-                        "id": "MLB0987654321",
-                        "title": "Cocacola"
-                      },
-                      {
-                        "id": "MLC1357908642",
-                        "title": "Seven Up"
-                      }
-                    ]
                   },
                   {
                     "id": "MLA5678901234",
@@ -124,6 +110,8 @@ export default function Home() {
     ]
   )
 
+  const [expanded, setExpanded] = useState([]);
+
   const reorder = (starIndex, endIndex, list) => {
     const result = [...list]
     const [removed] = result.splice(starIndex, 1)
@@ -131,44 +119,71 @@ export default function Home() {
     return result
   }
 
-  const [expanded, setExpanded] = useState([]);
+  const getElementByCoord = (coord, children) => {
+    const nextCoord = [...coord]
+    if (nextCoord.length === 1) {
+      const id = nextCoord.shift()
+      const element = children.find((child) => child.id === id)
+      const index = children.indexOf(element)
+      children.splice(index, 1)
+      return element
+    }
+    const nextId = nextCoord.shift()
+    const nextChild = children.find((child) => child.id === nextId)
+    return getElementByCoord(nextCoord, nextChild.children)
+  }
+
+  const insertElementByCoord = (coord, children, elementToInsert) => {
+    const nextCoord = [...coord]
+    if (nextCoord.length === 1) {
+      const id = nextCoord.shift()
+      const element = children.find((child) => child.id === id)
+      const index = children.indexOf(element)
+      children.splice(index, 0, elementToInsert)
+      return
+    }
+    const nextId = nextCoord.shift()
+    const nextChild = children.find((child) => child.id === nextId)
+    insertElementByCoord(nextCoord, nextChild.children, elementToInsert)
+  }
+
+  const reorderElementsByCoord = (coordEnd, children, elementInsertId) => {
+    const nextCoord = [...coordEnd]
+    console.log(nextCoord,elementInsertId , '<<<<<<')
+    if (nextCoord.length === 1) {
+      const id = nextCoord.shift()
+      const elementLocalPosition = children.find((child) => child.id === id)
+      const elementDelete = children.find((child) => child.id === elementInsertId)
+      const indexPosition = children.indexOf(elementLocalPosition)
+      const indextDelete = children.indexOf(elementDelete)
+      children.splice(indextDelete, 1)
+      children.splice(indexPosition, 0, elementDelete)
+      return
+    }
+    const nextId = nextCoord.shift()
+    const nextChild = children.find((child) => child.id === nextId)
+    reorderElementsByCoord(nextCoord, nextChild.children, elementInsertId)
+  }
 
   const reorderWithCoorder = (start, end, obj) => {
     const coordStart = [...start]
     const coordEnd = [...end]
     const newObj = [...obj]
-    let elementRemovie = undefined
 
-    if(coordStart.length === 1 && coordEnd.length === 1) {
-      return reorder(coordStart[0], coordEnd[0], newObj)
+    const idElemetFromInsert = start[start.length - 1]
+    const checkIfElementIfFather = coordEnd.some(coord => coord === idElemetFromInsert)
+    if (checkIfElementIfFather) {
+      return obj
     }
-
-    const getElementByCorrd = (newCoordStart, recurObj) => {
-      if (newCoordStart.length === 2) {
-        const coord = newCoordStart.shift()
-        const result = recurObj[coord]
-        const [removed] = result.children.splice(newCoordStart[0], 1)
-        elementRemovie = removed
-        return
-      }
-      const coord = newCoordStart.shift()
-      getElementByCorrd(newCoordStart, recurObj[coord].children)
+    if (JSON.stringify(start) === JSON.stringify(end)) {
+      return obj
     }
-    getElementByCorrd(coordStart, newObj)
-
-    const insertElemetByCord = (newCoordEnd, newObj) => {
-      if (newCoordEnd.length === 2) {
-        const coord = newCoordEnd.shift()
-        const result = newObj[coord]
-        result.children.splice(newCoordEnd[0], 0, elementRemovie)
-        return
-      }
-      const coord = newCoordEnd.shift()
-      insertElemetByCord(newCoordEnd, newObj[coord].children)
+    if (start.length === end.length) {
+      reorderElementsByCoord(coordEnd, newObj, idElemetFromInsert)
+      return newObj
     }
-
-    insertElemetByCord(coordEnd, newObj)
-
+    const elementFromInsert = getElementByCoord(coordStart, newObj)
+    insertElementByCoord(coordEnd, newObj, elementFromInsert)
     return newObj
   }
 
@@ -177,20 +192,16 @@ export default function Home() {
     return (
       (obj ?? []).map((child, index) => {
         const newTree = tree.split('.')
-        newTree[level] = index
+        newTree[level] = child.id
         const nodeId = newTree.toString().replace(/,/g, '.');
         return (
           <div key={nodeId}>
             {
               child.children ? (
-                <TreeItem label={`${child.title}: ${nodeId}`} nodeId={`${nodeId}`}>
+                <TreeItem label={`${child.title}`} nodeId={`${nodeId}`}>
                   <RenderItems obj={child.children} level={level + 1} tree={`${nodeId}`} />
                 </TreeItem>
-              ) : child.type === 'list' ? (
-                <TreeItem label={`${child.title}:  ${nodeId}`} nodeId={`${nodeId}`}>
-                  <RenderItems obj={child.items.values} level={level + 1} tree={`${nodeId}`} />
-                </TreeItem>
-              ) : (<TreeItem label={`${child.title}:  ${nodeId}`} nodeId={`${nodeId}`} />)
+              ) : (<TreeItem label={`${child.title}`} nodeId={`${nodeId}`} />)
             }
           </div>
         )
@@ -208,22 +219,17 @@ export default function Home() {
   }
 
   const onDragEnd = (e) => {
-    const { source, destination, draggableId } = e;
+    const { destination, draggableId: elementStart } = e;
     if (destination === null) {
       return
     }
-
     const id = destination.index
-
-    const abc = document.getElementById(id)
-    let text = abc.getAttribute("data-rbd-draggable-id");
-    const startElements = draggableId.split('.').map((dragId) => parseInt(dragId))
-    const endElements = text.split('.').map((dragId) => parseInt(dragId))
-
-    const result = reorderWithCoorder(startElements, endElements, data)
-    console.log(startElements, 'startElements', endElements, 'endElements')
+    const element = document.getElementById(id)
+    const elementEnd = element.getAttribute("data-rbd-draggable-id");
+    const coordStart = elementStart.split('.')
+    const coordEnd = elementEnd.split('.')
+    const result = reorderWithCoorder(coordStart, coordEnd, data)
     setData(result)
-    //TODO actualizar el estado
   }
   return (
     <div className="root">
