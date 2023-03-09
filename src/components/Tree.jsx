@@ -7,8 +7,7 @@ function Tree(props) {
   const { children, expanded, onExpand, onDragEnd } = props;
 
   const nodeIndexRef = useRef(0);
-  let relativeIndex = 0
-
+  
   const arr = React.Children.toArray(children);
   const isExpanded = useCallback(
     (nodeId) => {
